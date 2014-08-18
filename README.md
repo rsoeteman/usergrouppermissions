@@ -1,4 +1,5 @@
-usergrouppermissions
+Usergroup permissions
 ====================
 
-Repository for Usergroup permissions source code
+Source code for the Umbraco package 
+http://our.umbraco.org/projects/backoffice-extensions/usergroup-permissions
