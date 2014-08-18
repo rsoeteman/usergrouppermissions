@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<umbPackage>
+  <files>
+    <file>
+      <guid>SetUsergroupPermissions.aspx</guid>
+      <orgPath>/umbraco/plugins/UserGroupPermissions/Dialogs</orgPath>
+      <orgName>SetUsergroupPermissions.aspx</orgName>
+    </file>
+    <file>
+      <guid>group_edit.png</guid>
+      <orgPath>/umbraco/plugins/UserGroupPermissions/Images</orgPath>
+      <orgName>group_edit.png</orgName>
+    </file>
+    <file>
+      <guid>usergrouppermissions.js</guid>
+      <orgPath>/umbraco/plugins/UserGroupPermissions/Scripts</orgPath>
+      <orgName>usergrouppermissions.js</orgName>
+    </file>
+    <file>
+      <guid>PackageActionsContrib.dll</guid>
+      <orgPath>/bin</orgPath>
+      <orgName>PackageActionsContrib.dll</orgName>
+    </file>
+    <file>
+      <guid>UserGroupPermissions.dll</guid>
+      <orgPath>/bin</orgPath>
+      <orgName>UserGroupPermissions.dll</orgName>
+    </file>
+  </files>
+  <info>
+    <package>
+      <name>UserGroupPermissions</name>
+      <version>1.0</version>
+      <license url="http://www.opensource.org/licenses/mit-license.php">MIT license</license>
+      <url>http://our.umbraco.org/projects/backoffice-extensions/usergroup-permissions</url>
+      <requirements>
+        <major>3</major>
+        <minor>0</minor>
+        <patch>0</patch>
+      </requirements>
+    </package>
+    <author>
+      <name>Richard Soeteman</name>
+      <website>http://www.richardsoeteman.net/</website>
+    </author>
+    <readme><![CDATA[Usergroup permissions helps you set node permissions on Usertypes instead of individual users. When you install the package you get an extra option in the context menu of a node to set the user group permissions for that node. There is also an option to set the permissions on all newly created users. When you select this option all userpermissions for the node will be replaced with the selected usergroup permissions
+
+When you create a new user, or change the group of the user  it will inherit the node permissions from the usertype.
+
+This is a beta version, use it on your own risk!
+
+
+]]></readme>
+  </info>
+  <DocumentTypes />
+  <Templates />
+  <Stylesheets />
+  <Macros />
+  <DictionaryItems />
+  <Languages />
+  <DataTypes />
+  <Actions>
+    <Action runat="install" alias="ExecuteSql">
+        <![CDATA[    
+CREATE TABLE [dbo].[UserGroupPermissions_UserType2NodePermission](
+	[userTypeId] [int] NOT NULL,
+	[nodeId] [int] NOT NULL,
+	[permission] [char](1) NOT NULL,
+ CONSTRAINT [PK_[UserGroupPermissions_UserType2NodePermission] PRIMARY KEY CLUSTERED 
+(
+	[userTypeId] ASC,
+	[nodeId] ASC,
+	[permission] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+    ]]></Action>
+  </Actions>
+</umbPackage>

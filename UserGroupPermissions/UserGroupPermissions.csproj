@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{348209D6-7A3C-4542-AC58-E85304C5D97E}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UserGroupPermissions</RootNamespace>
+    <AssemblyName>UserGroupPermissions</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <UseIISExpress>false</UseIISExpress>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="businesslogic, Version=1.0.4029.25828, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Binaries\businesslogic.dll</HintPath>
+    </Reference>
+    <Reference Include="cms, Version=1.0.4029.25830, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Binaries\cms.dll</HintPath>
+    </Reference>
+    <Reference Include="controls, Version=1.0.4029.25832, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Binaries\controls.dll</HintPath>
+    </Reference>
+    <Reference Include="interfaces, Version=1.0.4029.25827, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Binaries\interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="umbraco, Version=1.0.4029.25836, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Binaries\umbraco.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.DataLayer">
+      <HintPath>Binaries\umbraco.DataLayer.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Binaries\businesslogic.dll" />
+    <Content Include="Binaries\cms.dll" />
+    <Content Include="Binaries\controls.dll" />
+    <Content Include="Binaries\interfaces.dll" />
+    <Content Include="Binaries\umbraco.dll" />
+    <Content Include="Dialogs\SetUsergroupPermissions.aspx" />
+    <Content Include="Images\group_edit.png" />
+    <Content Include="Scripts\UserGroupPermissions.js" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Businesslogic\Languagefiles.cs" />
+    <Compile Include="Businesslogic\UserTypePermissions.cs" />
+    <Compile Include="Dialogs\SetUsergroupPermissions.aspx.cs">
+      <DependentUpon>SetUsergroupPermissions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Dialogs\SetUsergroupPermissions.aspx.designer.cs">
+      <DependentUpon>SetUsergroupPermissions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Events\AddUserGroupPermissionToContextMenu.cs" />
+    <Compile Include="Events\InstallLanguageskeys.cs" />
+    <Compile Include="Events\ReloadUsersOnSaveUsertype.cs" />
+    <Compile Include="Events\UserSaved.cs" />
+    <Compile Include="ExtensionMethods\UserExtensions.cs" />
+    <Compile Include="ExtensionMethods\UsertypeExtensions.cs" />
+    <Compile Include="MenuActions\UsergroupPermissions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>50335</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>XCOPY "$(ProjectDir)bin\usergroup*.dll" "F:\sites\umbracov46\bin\" /y /s
+XCOPY "$(ProjectDir)Dialogs\*.aspx" "F:\sites\umbracov46\umbraco\plugins\UserGroupPermissions\Dialogs" /y /s
+XCOPY "$(ProjectDir)Scripts\*.js" "F:\sites\umbracov46\umbraco\plugins\UserGroupPermissions\Scripts\" /y /s
+XCOPY "$(ProjectDir)Images\*.png" "F:\sites\umbracov46\umbraco\plugins\UserGroupPermissions\Images\" /y /s
+
+
+if /I "$(ConfigurationName)" == "Release" XCOPY "$(ProjectDir)bin\usergroup*.dll" "$(ProjectDir)..\Package\70322359-01bf-416f-ba50-49f9cb4dc0f6\" /y
+if /I "$(ConfigurationName)" == "Release" XCOPY "$(ProjectDir)Dialogs\*.aspx" "$(ProjectDir)..\Package\70322359-01bf-416f-ba50-49f9cb4dc0f6\" /y
+if /I "$(ConfigurationName)" == "Release" XCOPY "$(ProjectDir)Scripts\*.js" "$(ProjectDir)..\Package\70322359-01bf-416f-ba50-49f9cb4dc0f6\" /y
+if /I "$(ConfigurationName)" == "Release" XCOPY "$(ProjectDir)Images\*.png" "$(ProjectDir)..\Package\70322359-01bf-416f-ba50-49f9cb4dc0f6\" /y</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
