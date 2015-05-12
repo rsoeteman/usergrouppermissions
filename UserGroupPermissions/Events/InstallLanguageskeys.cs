@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using umbraco.BusinessLogic;
+﻿using Umbraco.Core;
 using UserGroupPermissions.Businesslogic;
-using umbraco.businesslogic;
 
 namespace UserGroupPermissions.Events
 {
-    public class InstallLanguageskeys : ApplicationStartupHandler 
+    public class InstallLanguageskeys : ApplicationEventHandler 
     {
         public InstallLanguageskeys()
         {

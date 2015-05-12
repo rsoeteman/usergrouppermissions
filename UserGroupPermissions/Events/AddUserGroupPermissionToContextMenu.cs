@@ -1,38 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using umbraco.cms.presentation.Trees;
-using UserGroupPermissions.MenuActions;
-using umbraco.interfaces;
-using umbraco.BusinessLogic;
-using umbraco.BusinessLogic.Actions;
-using umbraco.businesslogic;
+﻿using Umbraco.Core;
+using Umbraco.Core.Models.Membership;
+using Umbraco.Web.Trees;
+using Umbraco.Web.Models.Trees;
+using Umbraco.Web.Mvc;
 
 namespace UserGroupPermissions.Events
 {
-    public class AddUserGroupPermissionToContextMenu : ApplicationStartupHandler 
+    public class AddUserGroupPermissionToContextMenu : ApplicationEventHandler 
     {
         public AddUserGroupPermissionToContextMenu()
         {
-            BaseContentTree.BeforeNodeRender += new BaseTree.BeforeNodeRenderEventHandler(BaseContentTree_BeforeNodeRender);
-        }
+            TreeControllerBase.MenuRendering += TreeControllerBase_MenuRendering;
 
-        void BaseContentTree_BeforeNodeRender(ref XmlTree sender, ref XmlTreeNode node, EventArgs e)
+            //TreeControllerBase.TreeNodesRendering += BaseContentTree_BeforeNodeRender;
+
+            //BaseContentTree.BeforeNodeRender += new BaseTree.BeforeNodeRenderEventHandler(BaseContentTree_BeforeNodeRender);
+        }
+        
+        //the event listener method:
+        void TreeControllerBase_MenuRendering(TreeControllerBase sender, MenuRenderingEventArgs e)
         {
-             if (node.Menu!= null && node.NodeType =="content")  
-             {  
-                 //Find the publish action and add 1 for the index, so the position of the ubpublish  is direct after the publish menu item  
-                 IAction action = node.Menu.Find(p => p.Alias == "rights");
-                 if (action != null)
-                 {
-                     int index = node.Menu.FindIndex(p => p.Alias == "rights");
-                    //Insert unpublish action  
-                     node.Menu.Insert(index, UsergroupPermissions.Instance);
-                     node.Menu.Insert(index, ContextMenuSeperator.Instance);
-                 }
-                 
-             }
+            //this example will add a custom menu item for all admin users
+            // for all content tree nodes
+            IUser currentUser = sender.Security.CurrentUser;
+            if (sender.TreeAlias == "content"
+                && currentUser.UserType.Alias == "admin")
+            {
+                var menuItem = new MenuItem("UserGroupPermissions", "User Group permissions") {Icon = "vcard"};
+
+                menuItem.LaunchDialogUrl("/App_Plugins/UserGroupPermissions/Dialogs/SetUsergroupPermissions.aspx?id=" + e.NodeId, "User Group permissions");
+
+                e.Menu.Items.Add(menuItem);
+
+            }
         }
     }
 }
