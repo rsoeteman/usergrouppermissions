@@ -72,18 +72,18 @@ namespace UserGroupPermissions.Businesslogic
 
         public string GetPermissions(IUserType userType, string path)
         {
-            //todo - umbraco 7 doesn't seem to store any default permissions.. struggling for documentation on how this works here;
-            string defaultPermissions = ""; //userType.DefaultPermissions;
+            
 
-
+            string defaultPermissions = String.Join(string.Empty, userType.Permissions);
+            
             var allUserPermissions = GetUserTypePermissions(userType).GroupBy(x => x.NodeId);
 
             foreach (string nodeId in path.Split(','))
             {
                 if (allUserPermissions.Select(x => x.Key).Contains(int.Parse(nodeId)))
                 {
-                    var userTypenodePermissions =
-                        allUserPermissions.FirstOrDefault(x => x.Key == int.Parse(nodeId)).Select(x => x.PermissionId).ToString();
+                    var userTypenodePermissions = 
+                        String.Join(string.Empty, allUserPermissions.FirstOrDefault(x => x.Key == int.Parse(nodeId)).Select(x => x.PermissionId));
 
                     if (!string.IsNullOrEmpty(userTypenodePermissions))
                     {
