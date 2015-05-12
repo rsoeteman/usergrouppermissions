@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Umbraco.Core;
@@ -71,8 +72,33 @@ namespace UserGroupPermissions.Businesslogic
 
         public string GetPermissions(IUserType userType, string path)
         {
-            var defaultPermissions = "";
+            //todo - umbraco 7 doesn't seem to store any default permissions.. struggling for documentation on how this works here;
+            string defaultPermissions = ""; //userType.DefaultPermissions;
 
+
+            var allUserPermissions = GetUserTypePermissions(userType).GroupBy(x => x.NodeId);
+
+            foreach (string nodeId in path.Split(','))
+            {
+                if (allUserPermissions.Select(x => x.Key).Contains(int.Parse(nodeId)))
+                {
+                    var userTypenodePermissions =
+                        allUserPermissions.FirstOrDefault(x => x.Key == int.Parse(nodeId)).Select(x => x.PermissionId).ToString();
+
+                    if (!string.IsNullOrEmpty(userTypenodePermissions))
+                    {
+                        defaultPermissions = userTypenodePermissions;
+                    }
+                }
+            }
+
+            return defaultPermissions;
+        }
+        /*
+        public string GetPermissions(IUserType userType, string path)
+        {
+            var defaultPermissions = "";
+            
             var permissions = GetUserTypePermissions(userType);
 
             var userTypePermissions = permissions as UserTypePermission[] ?? permissions.ToArray();
@@ -80,11 +106,12 @@ namespace UserGroupPermissions.Businesslogic
             foreach (var perm in userTypePermissions)
             {
                 if (userTypePermissions.Select(x=>x.NodeId).Contains(perm.NodeId))
-                    defaultPermissions = perm.NodeId.ToString();
+                    defaultPermissions += perm.PermissionId;
             }
 
             return defaultPermissions;
         }
+         */
 
         /// <summary>
         /// Returns the permissions for a node
@@ -93,7 +120,6 @@ namespace UserGroupPermissions.Businesslogic
         /// <returns></returns>
         public IEnumerable<UserTypePermission> GetNodePermissions(IContent node)
         {
-                
             var items = _sqlHelper.Fetch<UserTypePermission>(
                 "select * from UserTypePermissions where NodeId = @0 order by nodeId", node.Id);
 
@@ -126,7 +152,7 @@ namespace UserGroupPermissions.Businesslogic
         /// <param name="node">The node.</param>
         public void CopyPermissions(IUserType userType, IContent node)
         {
-            string permissions = GetPermissions(userType, node.Path);
+            IEnumerable<char>permissions = GetPermissions(userType, node.Path);
 
             foreach (IUser user in userType.GetAllRelatedUsers())
             {
@@ -145,12 +171,12 @@ namespace UserGroupPermissions.Businesslogic
         /// <param name="userType"></param>
         /// <param name="node"></param>
         public void DeletePermissions(IUserType userType, IContent node)
-            {
-                // delete all settings on the node for this user
+        {
+            // delete all settings on the node for this user
 
-                _sqlHelper.Execute("delete from UserTypePermissions where UserTypeId=@0 and NodeId = @1", userType.Id, node.Id);
+            _sqlHelper.Execute("delete from UserTypePermissions where UserTypeId=@0 and NodeId = @1", userType.Id, node.Id);
 
-            }
+        }
 
         /// <summary>
         /// deletes all permissions for the user

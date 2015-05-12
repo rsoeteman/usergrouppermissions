@@ -168,26 +168,11 @@ namespace UserGroupPermissions.Dialogs
             // Reload the page if the content was already being viewed
             ClientTools.ReloadContentFrameUrlIfPathLoaded("/editContent.aspx?id=" + node.Id);
 
-            /*
-            // Display success message
-            SuccessMessage.Text = global::umbraco.ui.Text("changeDocType", "successMessage").Replace("[new type]", "<strong>" + newContentType.Name + "</strong>");
-            PropertiesMappedMessage.Text = propertiesMappedMessageBuilder.ToString();
-            if (wasPublished)
-            {
-                ContentPublishedMessage.Text = global::umbraco.ui.Text("changeDocType", "contentRepublished");
-                ContentPublishedMessage.Visible = true;
-            }
-            else
-            {
-                ContentPublishedMessage.Visible = false;
-            }
-            */
-
             // Update feedback message
             feedback1.type = umbraco.uicontrols.Feedback.feedbacktype.success;
             feedback1.Text = "Usergroup permissions saved ok ";
             pane_form.Visible = false;
-
+            
         }
     }
 }

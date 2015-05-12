@@ -17,7 +17,7 @@ namespace UserGroupPermissions.ExtensionMethods
         {
             int total;
 
-            return ApplicationContext.Current.Services.UserService.GetAll(int.MaxValue, int.MaxValue, out total).Where(x=>x.UserType == userType).OrderBy(x=>x.Name).ToArray();
+            return ApplicationContext.Current.Services.UserService.GetAll(0, int.MaxValue, out total).Where(x=>x.UserType.Id== userType.Id).OrderBy(x=>x.Name).ToArray();
 
         }
     }
