@@ -1,33 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using umbraco.BusinessLogic;
+using umbraco.cms.businesslogic;
 using UserGroupPermissions.Businesslogic;
-using umbraco.businesslogic;
+using Umbraco.Core;
+using Umbraco.Core.Events;
+using Umbraco.Core.Models.Membership;
+using Umbraco.Core.Services;
+using User = umbraco.BusinessLogic.User;
 
 namespace UserGroupPermissions.Events
 {
-    public class UserSaved : ApplicationStartupHandler
+    public class UserSaved : ApplicationEventHandler
     {
         public UserSaved()
         {
-            User.Saving += new User.SavingEventHandler(User_Saving);
+
+
+            UserService.SavingUser += User_Saving;
+
+            //User.Saving += UserService.SavingUserSavingEventHandler(User_Saving);
         }
 
-        void User_Saving(User sender, EventArgs e)
+        void User_Saving(IUserService service, SaveEventArgs<IUser> e)
         {
             //User is already saved but the object itself is not updated yet.
             //Get user from database and use that user to copy the permissions
-            User savedUser = User.GetUser(sender.Id);
+            IUser savedUser = service.GetUserById(e.SavedEntities.FirstOrDefault().Id);
 
-            if (sender.UserType.Alias != savedUser.UserType.Alias)
+            if (e.SavedEntities.FirstOrDefault().UserType.Alias != savedUser.UserType.Alias)
             {
                 //Only save when usertype is changed
-                UserTypePermissions.CopyPermissionsForSingleUser(savedUser);
-
+                UserTypePermissionsService.CopyPermissionsForSingleUser(savedUser);
             }
-
         }
 
     }
