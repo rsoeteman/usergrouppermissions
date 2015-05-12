@@ -94,24 +94,6 @@ namespace UserGroupPermissions.Businesslogic
 
             return defaultPermissions;
         }
-        /*
-        public string GetPermissions(IUserType userType, string path)
-        {
-            var defaultPermissions = "";
-            
-            var permissions = GetUserTypePermissions(userType);
-
-            var userTypePermissions = permissions as UserTypePermission[] ?? permissions.ToArray();
-
-            foreach (var perm in userTypePermissions)
-            {
-                if (userTypePermissions.Select(x=>x.NodeId).Contains(perm.NodeId))
-                    defaultPermissions += perm.PermissionId;
-            }
-
-            return defaultPermissions;
-        }
-         */
 
         /// <summary>
         /// Returns the permissions for a node
@@ -133,16 +115,20 @@ namespace UserGroupPermissions.Businesslogic
         /// <param name="user">The user.</param>
         public void CopyPermissionsForSingleUser(IUser user)
         {
-            var permissions = GetUserTypePermissions(user.UserType);
-
-            foreach (var permission in permissions)
+            if (!user.IsAdmin() && !user.Disabled())
             {
-                var node = ApplicationContext.Current.Services.ContentService.GetById(permission.NodeId);
+                var permissions = GetUserTypePermissions(user.UserType);
 
-                ApplicationContext.Current.Services.ContentService.AssignContentPermission(node, permission.PermissionId, new int[]{user.Id});
+                foreach (var permission in permissions)
+                {
 
+                    var node = ApplicationContext.Current.Services.ContentService.GetById(permission.NodeId);
+
+                    ApplicationContext.Current.Services.ContentService.AssignContentPermission(node,
+                        permission.PermissionId, new int[] {user.Id});
+
+                }
             }
-
         }
 
         /// <summary>
@@ -216,12 +202,16 @@ namespace UserGroupPermissions.Businesslogic
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateCruds(IUserType userType, IContent node, string permissions)
         {
-            // delete all settings on the node for this user
-            DeletePermissions(userType, node);
+            // do not act on admin user types.
+            if (userType.Alias != "admin")
+            {
+                // delete all settings on the node for this user
+                DeletePermissions(userType, node);
 
-            // Loop through the permissions and create them
-            foreach (char c in permissions.ToCharArray())
-                Insert(userType, node, c);
+                // Loop through the permissions and create them
+                foreach (char c in permissions.ToCharArray())
+                    Insert(userType, node, c);
+            }
         }
     }
 }
