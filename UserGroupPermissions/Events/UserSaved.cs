@@ -12,9 +12,12 @@ namespace UserGroupPermissions.Events
 {
     public class UserSaved : ApplicationEventHandler
     {
+
+        private readonly UserTypePermissionsService _userTypePermissionsService;
+
         public UserSaved()
         {
-
+            _userTypePermissionsService = new UserTypePermissionsService();
 
             UserService.SavingUser += User_Saving;
 
@@ -30,7 +33,7 @@ namespace UserGroupPermissions.Events
             if (e.SavedEntities.FirstOrDefault().UserType.Alias != savedUser.UserType.Alias)
             {
                 //Only save when usertype is changed
-                UserTypePermissionsService.CopyPermissionsForSingleUser(savedUser);
+                _userTypePermissionsService.CopyPermissionsForSingleUser(savedUser);
             }
         }
 

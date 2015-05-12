@@ -23,6 +23,7 @@ namespace UserGroupPermissions.Dialogs
     {
         private ArrayList permissions = new ArrayList();
         private IContent node;
+        private readonly UserTypePermissionsService _userTypePermissionsService = new UserTypePermissionsService();
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
@@ -86,7 +87,7 @@ namespace UserGroupPermissions.Dialogs
                         {
                             CheckBox c = new CheckBox();
                             c.ID = userType.Id + "_" + a.Letter;
-                                if (userType.GetPermissions(node.Path).IndexOf(a.Letter) > -1)
+                            if (_userTypePermissionsService.GetPermissions(userType, node.Path).IndexOf(a.Letter) > -1)
                                     c.Checked = true;
                                 HtmlTableCell cell = new HtmlTableCell();
                                 cell.Style.Add("text-align", "center");
@@ -146,12 +147,12 @@ namespace UserGroupPermissions.Dialogs
                 }
                 IUserType usertype = ApplicationContext.Services.UserService.GetUserTypeById(int.Parse(uEnum.Key.ToString()));
 
-                UserTypePermissionsService.UpdateCruds(usertype, node, cruds);
+                _userTypePermissionsService.UpdateCruds(usertype, node, cruds);
 
                 if (ReplacePermissionsOnChildren.Checked)
                 {
                     //Replace permissions on all children
-                    UserTypePermissionsService.CopyPermissions(usertype, node);
+                    _userTypePermissionsService.CopyPermissions(usertype, node);
                 }
             }
 

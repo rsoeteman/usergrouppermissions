@@ -9,7 +9,7 @@ namespace UserGroupPermissions.ExtensionMethods
 {
     public static class UsertypeExtensions
     {
-        public static string GetPermissions(this IUserType userType, string path)
+/*        public static string GetPermissions(this IUserType userType, string path)
         {
             //string defaultPermissions = userType.DefaultPermissions;
 
@@ -26,12 +26,12 @@ namespace UserGroupPermissions.ExtensionMethods
                 }
 
             return defaultPermissions;
-        }
+        }*/
 
         /// <summary>
         /// Initializes the user node permissions
         /// </summary>
-        private static Hashtable GetPermissions(int userTypeId)
+        /*private static Hashtable GetPermissions(int userTypeId)
         {
             Hashtable permissions = new Hashtable();
 
@@ -50,7 +50,7 @@ namespace UserGroupPermissions.ExtensionMethods
 
             return permissions;
 
-        }
+        }*/
 
 
         /// <summary>
