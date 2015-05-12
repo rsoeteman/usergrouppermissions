@@ -3,7 +3,7 @@ using UserGroupPermissions.Businesslogic;
 
 namespace UserGroupPermissions.Events
 {
-    public class InstallLanguageskeys : ApplicationEventHandler
+    public class InstallLanguageskeys : ApplicationEventHandler 
     {
         public InstallLanguageskeys()
         {

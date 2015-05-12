@@ -1,26 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using umbraco.BusinessLogic;
 using System.Collections;
-using umbraco.DataLayer;
+using Umbraco.Core;
+using Umbraco.Core.Models.Membership;
+using UserGroupPermissions.Models;
 
 namespace UserGroupPermissions.ExtensionMethods
 {
     public static class UsertypeExtensions
     {
-        public static string GetPermissions(this UserType userType, string path)
+        public static string GetPermissions(this IUserType userType, string path)
         {
-            string defaultPermissions = userType.DefaultPermissions;
+            //string defaultPermissions = userType.DefaultPermissions;
+
+            //var defaultPermissions = userType.GetAllRelatedUsers().FirstOrDefault().DefaultPermissions;
+
+            var defaultPermissions = "";
 
             Hashtable permissions = GetPermissions(userType.Id);
 
                 foreach (string nodeId in path.Split(','))
-            {
-                if (permissions.ContainsKey(int.Parse(nodeId)))
-                    defaultPermissions = permissions[int.Parse(nodeId)].ToString();
-            }
+                {
+                    if (permissions.ContainsKey(int.Parse(nodeId)))
+                        defaultPermissions = permissions[int.Parse(nodeId)].ToString();
+                }
 
             return defaultPermissions;
         }
@@ -32,20 +35,21 @@ namespace UserGroupPermissions.ExtensionMethods
         {
             Hashtable permissions = new Hashtable();
 
+            var db = ApplicationContext.Current.DatabaseContext.Database;
 
-            using (IRecordsReader dr = Application.SqlHelper.ExecuteReader("select * from UserGroupPermissions_UserType2NodePermission where userTypeId = @userTypeId order by nodeId", Application.SqlHelper.CreateParameter("@userTypeId", userTypeId)))
+            var perms = db.Fetch<UserTypePermission>("select * from UserTypePermissions where UserTypeId = @0", userTypeId);
+
+            foreach (var perm in perms)
             {
-                //	int currentId = -1;
-                while (dr.Read())
+                if (!permissions.ContainsKey(perm.NodeId))
                 {
-                    if (!permissions.ContainsKey(dr.GetInt("nodeId")))
-                        permissions.Add(dr.GetInt("nodeId"), String.Empty);
-
-                    permissions[dr.GetInt("nodeId")] += dr.GetString("permission");
+                    permissions.Add(perm.NodeId, String.Empty);
                 }
+                permissions[perm.NodeId] += perm.PermissionId.ToString();
             }
 
             return permissions;
+
         }
 
 
@@ -53,21 +57,12 @@ namespace UserGroupPermissions.ExtensionMethods
         /// Gets all users related to the doctype
         /// </summary>
         /// <returns></returns>
-        public static User[] GetAllRelatedUsers(this UserType userType)
+        public static IUser[] GetAllRelatedUsers(this IUserType userType)
         {
+            int total;
 
-            IRecordsReader dr;
-            dr = Application.SqlHelper.ExecuteReader("Select id from umbracoUser where userType = @userType", Application.SqlHelper.CreateParameter("userType", userType.Id));
+            return ApplicationContext.Current.Services.UserService.GetAll(int.MaxValue, int.MaxValue, out total).Where(x=>x.UserType == userType).OrderBy(x=>x.Name).ToArray();
 
-            List<User> users = new List<User>();
-
-            while (dr.Read())
-            {
-                users.Add(User.GetUser(dr.GetInt("id")));
-            }
-            dr.Close();
-
-            return users.OrderBy(x => x.Name).ToArray();
         }
     }
 }
