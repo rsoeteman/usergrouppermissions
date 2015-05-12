@@ -14,7 +14,7 @@ namespace UserGroupPermissions.ExtensionMethods
             //string defaultPermissions = userType.DefaultPermissions;
 
             //var defaultPermissions = userType.GetAllRelatedUsers().FirstOrDefault().DefaultPermissions;
-
+            
             var defaultPermissions = "";
 
             Hashtable permissions = GetPermissions(userType.Id);

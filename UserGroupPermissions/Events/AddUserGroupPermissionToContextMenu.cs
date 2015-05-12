@@ -6,7 +6,7 @@ using Umbraco.Web.Mvc;
 
 namespace UserGroupPermissions.Events
 {
-    public class AddUserGroupPermissionToContextMenu : ApplicationEventHandler
+    public class AddUserGroupPermissionToContextMenu : ApplicationEventHandler 
     {
         public AddUserGroupPermissionToContextMenu()
         {
@@ -16,7 +16,7 @@ namespace UserGroupPermissions.Events
 
             //BaseContentTree.BeforeNodeRender += new BaseTree.BeforeNodeRenderEventHandler(BaseContentTree_BeforeNodeRender);
         }
-
+        
         //the event listener method:
         void TreeControllerBase_MenuRendering(TreeControllerBase sender, MenuRenderingEventArgs e)
         {
