@@ -23,8 +23,13 @@ namespace UserGroupPermissions.Dialogs
     {
         private ArrayList permissions = new ArrayList();
         private IContent node;
-        private readonly UserTypePermissionsService _userTypePermissionsService = new UserTypePermissionsService();
 
+        private readonly UserTypePermissionsService _userTypePermissionsService;
+
+        public SetUsergroupPermissions()
+        {
+            _userTypePermissionsService = new UserTypePermissionsService();
+        }
         protected void Page_Load(object sender, System.EventArgs e)
         {
             Button1.Text = ui.Text("update");

@@ -9,50 +9,6 @@ namespace UserGroupPermissions.ExtensionMethods
 {
     public static class UsertypeExtensions
     {
-/*        public static string GetPermissions(this IUserType userType, string path)
-        {
-            //string defaultPermissions = userType.DefaultPermissions;
-
-            //var defaultPermissions = userType.GetAllRelatedUsers().FirstOrDefault().DefaultPermissions;
-            
-            var defaultPermissions = "";
-
-            Hashtable permissions = GetPermissions(userType.Id);
-
-                foreach (string nodeId in path.Split(','))
-                {
-                    if (permissions.ContainsKey(int.Parse(nodeId)))
-                        defaultPermissions = permissions[int.Parse(nodeId)].ToString();
-                }
-
-            return defaultPermissions;
-        }*/
-
-        /// <summary>
-        /// Initializes the user node permissions
-        /// </summary>
-        /*private static Hashtable GetPermissions(int userTypeId)
-        {
-            Hashtable permissions = new Hashtable();
-
-            var db = ApplicationContext.Current.DatabaseContext.Database;
-
-            var perms = db.Fetch<UserTypePermission>("select * from UserTypePermissions where UserTypeId = @0", userTypeId);
-
-            foreach (var perm in perms)
-            {
-                if (!permissions.ContainsKey(perm.NodeId))
-                {
-                    permissions.Add(perm.NodeId, String.Empty);
-                }
-                permissions[perm.NodeId] += perm.PermissionId.ToString();
-            }
-
-            return permissions;
-
-        }*/
-
-
         /// <summary>
         /// Gets all users related to the doctype
         /// </summary>

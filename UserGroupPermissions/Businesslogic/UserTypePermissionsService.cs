@@ -69,45 +69,18 @@ namespace UserGroupPermissions.Businesslogic
                 return items;
             }
 
-        /// <summary>
-        /// Initializes the user node permissions
-        /// </summary>
-        private Hashtable GetPermissions(int userTypeId)
-        {
-            Hashtable permissions = new Hashtable();
-
-            var db = ApplicationContext.Current.DatabaseContext.Database;
-
-            var userType = ApplicationContext.Current.Services.UserService.GetUserTypeById(userTypeId);
-
-            var perms = GetUserTypePermissions(userType);
-
-            foreach (var perm in perms)
-            {
-                if (!permissions.ContainsKey(perm.NodeId))
-                {
-                    permissions.Add(perm.NodeId, String.Empty);
-                }
-                permissions[perm.NodeId] += perm.PermissionId.ToString();
-            }
-
-            return permissions;
-
-        }
         public string GetPermissions(IUserType userType, string path)
         {
-            //string defaultPermissions = userType.DefaultPermissions;
-
-            //var defaultPermissions = userType.GetAllRelatedUsers().FirstOrDefault().DefaultPermissions;
-
             var defaultPermissions = "";
 
-            Hashtable permissions = GetPermissions(userType.Id);
+            var permissions = GetUserTypePermissions(userType);
 
-            foreach (string nodeId in path.Split(','))
+            var userTypePermissions = permissions as UserTypePermission[] ?? permissions.ToArray();
+
+            foreach (var perm in userTypePermissions)
             {
-                if (permissions.ContainsKey(int.Parse(nodeId)))
-                    defaultPermissions = permissions[int.Parse(nodeId)].ToString();
+                if (userTypePermissions.Select(x=>x.NodeId).Contains(perm.NodeId))
+                    defaultPermissions = perm.NodeId.ToString();
             }
 
             return defaultPermissions;
@@ -184,45 +157,45 @@ namespace UserGroupPermissions.Businesslogic
         /// </summary>
         /// <param name="userType"></param>
         public void DeletePermissions(IUserType userType)
-            {
-                // delete all settings on the node for this user
+        {
+            // delete all settings on the node for this user
 
-                _sqlHelper.Execute("delete from UserTypePermissions where UserTypeId=@0 ", userType.Id);
+            _sqlHelper.Execute("delete from UserTypePermissions where UserTypeId=@0 ", userType.Id);
 
-            }
+        }
 
-            public void DeletePermissions(int userTypeId, int[] iNodeIDs)
-            {
+        public void DeletePermissions(int userTypeId, int[] iNodeIDs)
+        {
                 
-                string nodeIDs = string.Join(",", Array.ConvertAll<int, string>(iNodeIDs, Converter));
+            string nodeIDs = string.Join(",", Array.ConvertAll<int, string>(iNodeIDs, Converter));
 
-                _sqlHelper.Execute("delete from UserTypePermissions where NodeId IN (@0) AND UserTypeId=@1 ", nodeIDs, userTypeId);
+            _sqlHelper.Execute("delete from UserTypePermissions where NodeId IN (@0) AND UserTypeId=@1 ", nodeIDs, userTypeId);
 
-            }
+        }
 
-            private string Converter(int from)
-            {
-                return from.ToString();
-            }
+        private string Converter(int from)
+        {
+            return from.ToString();
+        }
 
-            /// <summary>
-            /// delete all permissions for this node
-            /// </summary>
-            /// <param name="node"></param>
-            public void DeletePermissions(IContent node)
-            {
-                _sqlHelper.Execute("delete from UserTypePermissions where NodeId = @0", node.Id);
-            }
+        /// <summary>
+        /// delete all permissions for this node
+        /// </summary>
+        /// <param name="node"></param>
+        public void DeletePermissions(IContent node)
+        {
+            _sqlHelper.Execute("delete from UserTypePermissions where NodeId = @0", node.Id);
+        }
 
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            public void UpdateCruds(IUserType userType, IContent node, string permissions)
-            {
-                // delete all settings on the node for this user
-                DeletePermissions(userType, node);
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void UpdateCruds(IUserType userType, IContent node, string permissions)
+        {
+            // delete all settings on the node for this user
+            DeletePermissions(userType, node);
 
-                // Loop through the permissions and create them
-                foreach (char c in permissions.ToCharArray())
-                    Insert(userType, node, c);
-            }
+            // Loop through the permissions and create them
+            foreach (char c in permissions.ToCharArray())
+                Insert(userType, node, c);
         }
     }
+}
